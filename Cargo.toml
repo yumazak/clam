@@ -11,3 +11,8 @@ keywords = ["clam", "template", "engine", "simple"]
 
 [dependencies]
 regex = "0.2"
+
+[dev-dependencies]
+iron = "*"
+router ="*"
+params="*"
