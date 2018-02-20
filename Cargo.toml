@@ -1,6 +1,6 @@
 [package]
 name = "clam"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["uma <blog3170@gmail.com>"]
 
 license = "MIT"
@@ -11,3 +11,4 @@ keywords = ["clam", "template", "engine", "simple"]
 
 [dependencies]
 regex = "0.2"
+iron = "0.6.0"

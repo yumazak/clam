@@ -1,10 +1,21 @@
 extern crate regex;
+extern crate iron;
 use self::regex::Regex;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::{BufReader};
 use std::path::Path;
+use self::iron::{headers, status};
+use self::iron::modifiers::Header;
+use self::iron::prelude::*;
+
+//return IronResult<Response>
+pub fn add(data: HashMap<&str, &str>, fname: &str) -> IronResult<Response>{
+    let string = render(data,fname);
+    Ok(Response::with((status::Ok, Header(headers::ContentType::html()), string)))
+}
+
 pub fn render(data: HashMap<&str, &str>, fname: &str) -> String{
     let s = fname.to_string() + ".clm";
     let path = Path::new(&s);
