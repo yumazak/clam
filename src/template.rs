@@ -2,50 +2,36 @@ extern crate regex;
 use self::regex::Regex;
 use std::collections::HashMap;
 use std::fs::File;
-use std::fs;
 use std::io::prelude::*;
 use std::io::{BufReader};
-use std::io::{BufWriter, Write};
 use std::path::Path;
-pub fn render(data: HashMap<&str, &str>, fname: &str, p: &str){
+pub fn render(data: HashMap<&str, &str>, fname: &str) -> String{
     let s = fname.to_string() + ".clm";
     let path = Path::new(&s);
+    let mut html = String::new();
     match File::open(path) {
             Ok(file) => {
                 let re = Regex::new(r"/(.+?).clm$").unwrap();
                 let cap = re.captures(&s).unwrap();
-                reg(BufReader::new(file), data, &cap[1], p);
+                html = reg(BufReader::new(file), data, &cap[1]);
             },
             Err(_) => {
                 println!("can't find {}.clm", fname)
             },
     }
+    return html;
 }
-fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>, fname: &str, p: &str){
+fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>, fname: &str) -> String{
     let re = Regex::new(r"<%[\s]*(.*?)[\s]*%>").unwrap();
-    let s =[p, "/" ,fname, ".html"].concat();
-    let path = Path::new(&s);
     //let path: Path;
-    let mut bw;
-    match File::create(path) {
-        Ok(file) => {
-            bw = BufWriter::new(file);
-        },
-        Err(_) => {
-            println!("can't find {}", p);
-            fs::create_dir_all(Path::new(&p)).unwrap_or_else(|why| {
-                println!("! {:?}", why.kind());
-            });
-            bw = BufWriter::new(File::create(path).unwrap());
-        }
-    }
+    let mut result = String::new();
     'outer: for xs in br.lines() {
         let s = xs.unwrap() + "\n";
         for cap in re.captures_iter(&s) {
             match data.get(&cap[1]) {
                 Some(ref d) => {
                     let s = s.to_string().replace(&cap[0], &d);
-                    bw.write(s.as_bytes()).unwrap();
+                    result += &s;
                     continue 'outer;
                 },
                 _ => {
@@ -53,6 +39,7 @@ fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>, fname: &str, p: &st
                 },
             }
         }
-        bw.write(&s.as_bytes()).unwrap();
+        result += &s;
     }
+    return result;
 }
