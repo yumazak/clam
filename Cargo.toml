@@ -5,5 +5,3 @@ authors = ["uma <blog3170@gmail.com>"]
 
 [dependencies]
 regex = "0.2"
-serde = "*"
-serde_json ="*"
