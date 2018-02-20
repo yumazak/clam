@@ -3,8 +3,7 @@ clam
 [![](http://meritbadge.herokuapp.com/clam)](https://crates.io/crates/clam)  
 EJSライクなRust用のシンプルなテンプレートエンジンです。(ironをちょっとだけ優遇)
 
-## Usage
-
+## 使い方
 
 拡張子clmのファイルを読み込み,<%= %>で囲まれたデータを対象にします。    
 
