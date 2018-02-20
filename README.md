@@ -31,8 +31,6 @@ fn main() {
 ```
   
 addメソッドを使うとIronResult<Response>を返すのでめっちゃ楽です。  
-  
-**main.rs**
 ```rust
 fn main() {
     fn top_handler(_: &mut Request) -> IronResult<Response> {
