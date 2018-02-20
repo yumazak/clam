@@ -11,17 +11,15 @@ pub fn render(data: HashMap<&str, &str>, fname: &str) -> String{
     let mut html = String::new();
     match File::open(path) {
             Ok(file) => {
-                let re = Regex::new(r"/(.+?).clm$").unwrap();
-                let cap = re.captures(&s).unwrap();
-                html = reg(BufReader::new(file), data, &cap[1]);
+                html = reg(BufReader::new(file), data);
             },
             Err(_) => {
-                println!("can't find {}.clm", fname)
+                println!("can't find {}.clm", fname);
             },
     }
     return html;
 }
-fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>, fname: &str) -> String{
+fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>) -> String{
     let re = Regex::new(r"<%[\s]*(.*?)[\s]*%>").unwrap();
     //let path: Path;
     let mut result = String::new();
