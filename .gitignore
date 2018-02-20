@@ -3,3 +3,4 @@
 **/*.rs.bk
 Cargo.lock
 src/main.rs
+src/index.html
