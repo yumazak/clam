@@ -8,14 +8,14 @@ EJSライクなRust用のシンプルなテンプレートエンジンです。(
 
 拡張子clmのファイルを読み込み,<%= %>で囲まれたデータを対象にします。    
 
-`index.clm`
+**index.clm**
 ```html
 <html>
   <p>Hi <%= name %></p>
 </html>
 ```
   
-`main.rs`
+**main.rs**
 ```rust
 extern crate clam;
 use clam::template;
@@ -33,7 +33,7 @@ fn main() {
   
 addメソッドを使うとIronResult<Response>を返すのでめっちゃ楽です。  
   
-`main.rs`
+**main.rs**
 ```rust
 fn main() {
     fn top_handler(_: &mut Request) -> IronResult<Response> {
