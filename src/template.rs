@@ -31,7 +31,7 @@ pub fn render(data: HashMap<&str, &str>, fname: &str) -> String{
     return html;
 }
 fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>) -> String{
-    let re = Regex::new(r"<%[\s]*(.*?)[\s]*%>").unwrap();
+    let re = Regex::new(r"<%=[\s]*(.*?)[\s]*%>").unwrap();
     //let path: Path;
     let mut result = String::new();
     'outer: for xs in br.lines() {
