@@ -1,5 +1,6 @@
 clam
 ===============
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
 [![](http://meritbadge.herokuapp.com/clam)](https://crates.io/crates/clam)  
 EJSライクなRust用のシンプルなテンプレートエンジンです。(ironをちょっとだけ優遇)
 
@@ -13,7 +14,7 @@ EJSライクなRust用のシンプルなテンプレートエンジンです。(
   <p>Hi <%= name %></p>
 </html>
 ```
-  
+
 **main.rs**
 ```rust
 extern crate clam;
@@ -23,13 +24,13 @@ fn main() {
     let mut data = HashMap::new();
     data.insert("name", "hoge");
     let html = template::render(data,"hoge/index");
-    //=> 
+    //=>
     //<html>
     //  <p>Hi hoge</p>
     //</html>
 }
 ```
-  
+
 addメソッドを使うとIronResult<Response>を返すのでめっちゃ楽です。  
 ```rust
 fn main() {
