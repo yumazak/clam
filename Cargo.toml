@@ -3,5 +3,11 @@ name = "clam"
 version = "0.1.0"
 authors = ["uma <blog3170@gmail.com>"]
 
+license = "MIT"
+description = "Simple template engine"
+repository = "https://github.com/uma0317/clam"
+readme = "README.md"
+keywords = ["clam", "template", "engine", "simple"]
+
 [dependencies]
 regex = "0.2"
