@@ -1,6 +1,6 @@
 extern crate clam;
 extern crate iron;
-use clam::{template, send};
+use clam::send;
 use std::collections::HashMap;
 use iron::prelude::*;
 
