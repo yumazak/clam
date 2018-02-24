@@ -1,7 +1,6 @@
 extern crate clam;
 extern crate iron;
 use clam::{template, send};
-use clam::send::ContentType;
 use std::collections::HashMap;
 use iron::prelude::*;
 
@@ -10,7 +9,7 @@ fn main() {
         let mut data = HashMap::new();
         data.insert("hi", "good morning");
         data.insert("url", "anihaya.tk");
-        send::mime("view/test.html", ContentType::HTML)
+        send::html("view/test.html", data)
     }
     let _server = Iron::new(top_handler).http("localhost:3000").unwrap();
     println!("Lisning on port 3000");
