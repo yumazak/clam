@@ -2,6 +2,6 @@
 /target/
 **/*.rs.bk
 Cargo.lock
-src/main.rs
 /html/
 /view/
+src/bin/*

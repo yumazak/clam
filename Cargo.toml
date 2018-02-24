@@ -12,3 +12,4 @@ keywords = ["clam", "template", "engine", "simple"]
 [dependencies]
 regex = "0.2"
 iron = "0.6.0"
+mime = "0.2.6"
