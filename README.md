@@ -33,7 +33,7 @@ fn main() {
 }
 ```
 
-addメソッドを使うとIronResult<Response>を返すのでめっちゃ楽です。  
+IronResult<Response>を返すのでironで使いやすいです。 
 ```rust
 extern crate clam;
 extern crate iron;
