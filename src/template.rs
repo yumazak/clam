@@ -48,4 +48,8 @@ impl Template {
         }
         return result;
     }
+<<<<<<< HEAD
+=======
+    result
+>>>>>>> master
 }

@@ -18,10 +18,8 @@ EJSライクなRust用のシンプルなテンプレートエンジンです。(
 **main.rs**
 ```rust
 extern crate clam;
-extern crate iron;
-use clam::send;
+use clam::template;
 use std::collections::HashMap;
-use iron::prelude::*;
 fn main() {
     let mut data = HashMap::new();
     data.insert("name", "hoge");
