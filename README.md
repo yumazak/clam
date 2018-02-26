@@ -25,7 +25,7 @@ use iron::prelude::*;
 fn main() {
     let mut data = HashMap::new();
     data.insert("name", "hoge");
-    let html = template::render(data, "view/index.html");
+    let html = template::render("view/index.html", data);
     //=>
     //<html>
     //  <p>Hi hoge</p>
