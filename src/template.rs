@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::{BufReader};
 use std::path::Path;
-
+#[derive(Debug)]
 pub struct Template<'a>{
     name: &'a str,
     data: HashMap<&'a str, &'a str>,
@@ -15,13 +15,13 @@ impl<'a> Template<'a> {
     pub fn new(name: &'a str, data: HashMap<&'a str, &'a str>) -> Template<'a> {
         Template {name: name, data: data}
     }
-    pub fn render(&self) -> String{
+    pub fn render(self) -> String{
         let s = &self.name.to_string();
         let path = Path::new(&s);
         let mut html = String::new();
         match File::open(path) {
                 Ok(file) => {
-                    html = Template::reg(self, BufReader::new(file));
+                    html = Template::reg(&self, BufReader::new(file));
                 },
                 Err(_) => {
                     println!("can't find {}", self.name);
