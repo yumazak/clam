@@ -27,7 +27,7 @@ impl<'a> Template<'a> {
                     println!("can't find {}", self.name);
                 },
         }
-        return html;
+        html
     }
 
     fn reg<R: Read>(&self, br: BufReader<R>) -> String{
@@ -49,6 +49,6 @@ impl<'a> Template<'a> {
             }
             result += &s;
         }
-        return result;
+        result
     }
 }
