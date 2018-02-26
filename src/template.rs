@@ -6,37 +6,40 @@ use std::io::prelude::*;
 use std::io::{BufReader};
 use std::path::Path;
 
-struct Template {
-    name: &str,
-    data: HashMap<&str, &str>,
+pub struct Template<'a>{
+    name: &'a str,
+    data: HashMap<&'a str, &'a str>,
 }
 
-impl Template {
-    fn render(data: HashMap<&str, &str>, fname: &str) -> String{
-        let s = fname.to_string();
+impl<'a> Template<'a> {
+    pub fn new(name: &'a str, data: HashMap<&'a str, &'a str>) -> Template<'a> {
+        Template {name: name, data: data}
+    }
+    pub fn render(&self) -> String{
+        let s = &self.name.to_string();
         let path = Path::new(&s);
         let mut html = String::new();
         match File::open(path) {
                 Ok(file) => {
-                    html = Template::reg(BufReader::new(file), data);
+                    html = Template::reg(self, BufReader::new(file));
                 },
                 Err(_) => {
-                    println!("can't find {}", fname);
+                    println!("can't find {}", self.name);
                 },
         }
         return html;
     }
 
-    fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>) -> String{
+    fn reg<R: Read>(&self, br: BufReader<R>) -> String{
         let re = Regex::new(r"<%=[\s]*(.*?)[\s]*%>").unwrap();
         let mut result = String::new();
+        println!("start");
         'outer: for xs in br.lines() {
             let s = xs.unwrap() + "\n";
             for cap in re.captures_iter(&s) {
-                match data.get(&cap[1]) {
+                match self.data.get(&cap[1]) {
                     Some(ref d) => {
-                        let s = s.to_string().replace(&cap[0], &d);
-                        result += &s;
+                        result += &s.to_string().replace(&cap[0], &d);
                         continue 'outer;
                     },
                     _ => {
@@ -48,8 +51,4 @@ impl Template {
         }
         return result;
     }
-<<<<<<< HEAD
-=======
-    result
->>>>>>> master
 }

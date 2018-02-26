@@ -18,16 +18,13 @@ EJSライクなRust用のシンプルなテンプレートエンジンです。(
 **main.rs**
 ```rust
 extern crate clam;
-use clam::template;
+use clam::template::Template;
 use std::collections::HashMap;
 fn main() {
-    let mut data = HashMap::new();
-    data.insert("name", "hoge");
-    let html = template::render("view/index.html", data);
-    //=>
-    //<html>
-    //  <p>Hi hoge</p>
-    //</html>
+        let mut data = HashMap::new();
+        data.insert("hi", "hoge");
+        let html = Template::new("view/index.html", data).render();
+        println!("{}", html);
 }
 ```
 
@@ -35,7 +32,7 @@ send::htmlでIronResult<Response>を返すのでironで使いやすいです。�
 ```rust
 extern crate clam;
 extern crate iron;
-use clam::template;
+use clam::send;
 use std::collections::HashMap;
 use iron::prelude::*;
 fn main() {
