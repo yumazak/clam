@@ -6,38 +6,46 @@ use std::io::prelude::*;
 use std::io::{BufReader};
 use std::path::Path;
 
-pub fn render(data: HashMap<&str, &str>, fname: &str) -> String{
-    let s = fname.to_string();
-    let path = Path::new(&s);
-    let mut html = String::new();
-    match File::open(path) {
-            Ok(file) => {
-                html = reg(BufReader::new(file), data);
-            },
-            Err(_) => {
-                println!("can't find {}", fname);
-            },
-    }
-    return html;
+struct Template {
+    name: &str,
+    data: HashMap<&str, &str>,
 }
-fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>) -> String{
-    let re = Regex::new(r"<%=[\s]*(.*?)[\s]*%>").unwrap();
-    let mut result = String::new();
-    'outer: for xs in br.lines() {
-        let s = xs.unwrap() + "\n";
-        for cap in re.captures_iter(&s) {
-            match data.get(&cap[1]) {
-                Some(ref d) => {
-                    let s = s.to_string().replace(&cap[0], &d);
-                    result += &s;
-                    continue 'outer;
+
+impl Template {
+    fn render(data: HashMap<&str, &str>, fname: &str) -> String{
+        let s = fname.to_string();
+        let path = Path::new(&s);
+        let mut html = String::new();
+        match File::open(path) {
+                Ok(file) => {
+                    html = Template::reg(BufReader::new(file), data);
                 },
-                _ => {
-                    println!("can't find {}", &cap[1])
+                Err(_) => {
+                    println!("can't find {}", fname);
                 },
-            }
         }
-        result += &s;
+        return html;
     }
-    return result;
+
+    fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>) -> String{
+        let re = Regex::new(r"<%=[\s]*(.*?)[\s]*%>").unwrap();
+        let mut result = String::new();
+        'outer: for xs in br.lines() {
+            let s = xs.unwrap() + "\n";
+            for cap in re.captures_iter(&s) {
+                match data.get(&cap[1]) {
+                    Some(ref d) => {
+                        let s = s.to_string().replace(&cap[0], &d);
+                        result += &s;
+                        continue 'outer;
+                    },
+                    _ => {
+                        println!("can't find {}", &cap[1])
+                    },
+                }
+            }
+            result += &s;
+        }
+        return result;
+    }
 }
