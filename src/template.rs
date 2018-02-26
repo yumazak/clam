@@ -6,7 +6,7 @@ use std::io::prelude::*;
 use std::io::{BufReader};
 use std::path::Path;
 
-pub fn render(data: HashMap<&str, &str>, fname: &str) -> String{
+pub fn render(fname: &str, data: HashMap<&str, &str>) -> String{
     let s = fname.to_string();
     let path = Path::new(&s);
     let mut html = String::new();
