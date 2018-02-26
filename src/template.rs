@@ -38,8 +38,8 @@ impl<'a> Template<'a> {
             let s = xs.unwrap() + "\n";
             for cap in re.captures_iter(&s) {
                 match self.data.get(&cap[1]) {
-                    Some(ref d) => {
-                        result += &s.to_string().replace(&cap[0], &d);
+                    Some(d) => {
+                        result += &s.to_string().replace(&cap[0], d);
                         continue 'outer;
                     },
                     _ => {
