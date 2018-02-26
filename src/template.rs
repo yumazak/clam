@@ -16,7 +16,7 @@ impl<'a> Template<'a> {
         Template {name: name, data: data}
     }
     pub fn render(self) -> String{
-        let s = &self.name.to_string();
+        let s = &self.name;
         let path = Path::new(&s);
         let mut html = String::new();
         match File::open(path) {
