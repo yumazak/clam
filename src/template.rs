@@ -18,7 +18,7 @@ pub fn render(fname: &str, data: HashMap<&str, &str>) -> String{
                 println!("can't find {}", fname);
             },
     }
-    return html;
+    html
 }
 fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>) -> String{
     let re = Regex::new(r"<%=[\s]*(.*?)[\s]*%>").unwrap();
@@ -28,8 +28,8 @@ fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>) -> String{
         for cap in re.captures_iter(&s) {
             match data.get(&cap[1]) {
                 Some(ref d) => {
-                    let s = s.to_string().replace(&cap[0], &d);
-                    result += &s;
+                    //let s = s.to_string().replace(&cap[0], &d);
+                    result += &s.to_string().replace(&cap[0], &d);
                     continue 'outer;
                 },
                 _ => {
@@ -39,5 +39,5 @@ fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>) -> String{
         }
         result += &s;
     }
-    return result;
+    result
 }
