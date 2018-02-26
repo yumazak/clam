@@ -27,9 +27,9 @@ impl<'a> TemplateBuilder<'a> {
     pub fn new(name: &'a str) -> TemplateBuilder<'a> {
         let s = "**default";
         let mut d = HashMap::new();
-        d.insert(s, s);
         let mut d2 = HashMap::new();
         let mut d3 = HashMap::new();
+        d.insert(s, s);
         d2.insert(s, s);
         d3.insert(s, d2);
         TemplateBuilder{name: name, data: d, hash_maps: d3}
