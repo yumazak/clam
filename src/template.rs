@@ -80,7 +80,6 @@ impl<'a> Template<'a> {
                         match self.hash_maps.get(&cap[1]) {
                             Some(_d) => {
                                 println!("hash_maps");
-                                continue 'outer;
                             },
                             _ => {println!("can't find {}", &cap[1])},
                         }
