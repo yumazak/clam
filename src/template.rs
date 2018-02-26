@@ -28,7 +28,6 @@ fn reg<R: Read>(br: BufReader<R>, data: HashMap<&str, &str>) -> String{
         for cap in re.captures_iter(&s) {
             match data.get(&cap[1]) {
                 Some(ref d) => {
-                    //let s = s.to_string().replace(&cap[0], &d);
                     result += &s.to_string().replace(&cap[0], &d);
                     continue 'outer;
                 },
