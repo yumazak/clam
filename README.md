@@ -25,7 +25,7 @@ use iron::prelude::*;
 fn main() {
     let mut data = HashMap::new();
     data.insert("name", "hoge");
-    let html = send::html(data,"hoge/index.html");
+    let html = template::render("view/index.html", data);
     //=>
     //<html>
     //  <p>Hi hoge</p>
@@ -33,18 +33,18 @@ fn main() {
 }
 ```
 
-IronResult<Response>を返すのでironで使いやすいです。 
+send::htmlでIronResult<Response>を返すのでironで使いやすいです。 
 ```rust
 extern crate clam;
 extern crate iron;
-use clam::send;
+use clam::template;
 use std::collections::HashMap;
 use iron::prelude::*;
 fn main() {
     fn top_handler(_: &mut Request) -> IronResult<Response> {
         let mut data = HashMap::new();
         data.insert("name", "hoge");
-        send::html(data,"view/index.html")
+        send::html("view/index.html", data)
     }
     let _server = Iron::new(top_handler).http("localhost:3000").unwrap();
 }
