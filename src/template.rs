@@ -5,14 +5,14 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::{BufReader};
 use std::path::Path;
-#[derive(Debug)]
-pub struct Template<'a>{
+//#[derive(Debug)]
+pub struct Template<'a, T>{
     name: &'a str,
-    data: HashMap<&'a str, &'a str>,
+    data: HashMap<&'a str, T>,
 }
 
-impl<'a> Template<'a> {
-    pub fn new(name: &'a str, data: HashMap<&'a str, &'a str>) -> Template<'a> {
+impl<'a, T> Template<'a, T> {
+    pub fn new(name: &'a str, data: HashMap<&'a str, T>) -> Template<'a, T> {
         Template {name: name, data: data}
     }
     pub fn render(self) -> String{
@@ -38,7 +38,7 @@ impl<'a> Template<'a> {
             let s = xs.unwrap() + "\n";
             for cap in re.captures_iter(&s) {
                 match self.data.get(&cap[1]) {
-                    Some(d) => {
+                    Some(d) if Eq(d, &str) => {
                         result += &s.to_string().replace(&cap[0], d);
                         continue 'outer;
                     },
