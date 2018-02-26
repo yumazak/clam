@@ -8,6 +8,8 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::{BufReader};
 use std::path::Path;
+use util::StrReplace;
+
 
 //#[derive(Debug)]
 pub struct Template<'a>{
@@ -23,7 +25,7 @@ pub struct TemplateBuilder<'a> {
 
 impl<'a> TemplateBuilder<'a> {
     pub fn new(name: &'a str) -> TemplateBuilder<'a> {
-        let s = "**d";
+        let s = "**default";
         let mut d = HashMap::new();
         d.insert(s, s);
         let mut d2 = HashMap::new();
@@ -58,9 +60,7 @@ impl<'a> Template<'a> {
                 Ok(file) => {
                     html = Template::reg(&self, BufReader::new(file));
                 },
-                Err(_) => {
-                    println!("can't find {}", self.name);
-                },
+                Err(_) => {println!("can't find {}", self.name)},
         }
         html
     }
@@ -68,14 +68,13 @@ impl<'a> Template<'a> {
     fn reg<R: Read>(&self, br: BufReader<R>) -> String{
         let re = Regex::new(r"<%=[\s]*(.*?)[\s]*%>").unwrap();
         let mut result = String::new();
-        println!("start");
         'outer: for xs in br.lines() {
             let s = xs.unwrap() + "\n";
+            let mut line = StrReplace::new(&s);
             for cap in re.captures_iter(&s) {
                 match self.data.get(&cap[1]) {
                     Some(d) => {
-                        result += &s.to_string().replace(&cap[0], d);
-                        continue 'outer;
+                        line.replace(&cap[0], d);
                     },
                     _ => {
                         match self.hash_maps.get(&cap[1]) {
@@ -88,7 +87,7 @@ impl<'a> Template<'a> {
                     },
                 }
             }
-            result += &s;
+            result += line.to_str();
         }
         result
     }
