@@ -10,7 +10,6 @@ use std::io::{BufReader};
 use std::path::Path;
 use util::StrReplace;
 
-
 //#[derive(Debug)]
 pub struct Template<'a>{
     name: &'a str,
@@ -66,7 +65,9 @@ impl<'a> Template<'a> {
     }
 
     fn reg<R: Read>(&self, br: BufReader<R>) -> String{
-        let re = Regex::new(r"<%=[\s]*(.*?)[\s]*%>").unwrap();
+        let re = Regex::new(r"<%=\s*(.+?)\s*%>").unwrap();
+        //<% for i in 0..6 %>
+        let command = Regex::new(r"<%[^=]\s*(.+?)\s.+%>").unwrap();
         let mut result = String::new();
         'outer: for xs in br.lines() {
             let s = xs.unwrap() + "\n";
@@ -86,6 +87,14 @@ impl<'a> Template<'a> {
                     },
                 }
             }
+            for cap in command.captures_iter(&s) {
+                println!("{:?}", cap);
+                match &cap[1] {
+                    "for" => {Template::c_for("i", 0, 3)},
+                    "if" => {println!("if")},
+                    _ => {}
+                }
+            }
             result += line.to_str();
         }
         result
@@ -94,5 +103,11 @@ impl<'a> Template<'a> {
     pub fn html(&self) -> IronResult<Response>{
         let body = self.render();
         Ok(Response::with((status::Ok, mime!(Text/Html; Charset=Utf8), body)))
+    }
+
+    fn c_for(v: &str, start: u32, end: u32) {
+        for i in start..end {
+            println!("{}", i);
+        }
     }
 }
