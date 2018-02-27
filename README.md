@@ -2,7 +2,7 @@ clam
 ===============
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![](http://meritbadge.herokuapp.com/clam)](https://crates.io/crates/clam)  
-EJSライクなRust用のシンプルなテンプレートエンジンです。(ironをちょっとだけ優遇)
+EJSライクなRust用のシンプルなテンプレートエンジンです。
 
 ## 使い方
 
@@ -24,19 +24,10 @@ fn main() {
         let mut data = HashMap::new();
         data.insert("hi", "hoge");
         let html = Template::new("view/index.html", data).render();
-        println!("{}", html);
 }
 ```
-簡易的なfor分も作りました。今はループさせることしかできません。。  
-```html
-<html>
-  <% for i in 0..5 %>
-    <div> hi <%= name %></div>
-  <% end %>
-</html>
-```
 
-send::htmlでIronResult<Response>を返すのでironで使いやすいです。 
+send::htmlでIronResult<Response>を返します。 
 ```rust
 extern crate clam;
 extern crate iron;
