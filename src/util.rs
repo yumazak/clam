@@ -18,12 +18,12 @@ impl StrReplace {
     }
 }
 
-pub struct Stack<'a> {
-    pub list: Vec<Command<'a>>,
+pub struct Stack{
+    pub list: Vec<Command>,
     pub data: Vec<String>,
 }
 
-impl<'a> Stack<'a> {
+impl Stack{
     pub fn add(&mut self, line: &str) -> &mut Self{
         match self.data.pop() {
             Some(mut v) => {

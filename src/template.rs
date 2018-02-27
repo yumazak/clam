@@ -79,27 +79,11 @@ impl<'a> Template<'a> {
                         stack.list.push(cmd);
                         stack.data.push("".to_string());
                     },
-                    "if" => {
-                        let re = Regex::new(r"<%[^=]\s*if\s(.+)\s(.{2})\s([^\s%]+)[\s%]|[%]>").unwrap();
-                        let cap = re.captures(&s).unwrap();
-                        let cmd = Command::If{con: cap.get(2).map_or("".to_string(), |m| m.as_str().to_string()),
-                            val1: cap.get(1).map_or("".to_string(), |m| m.as_str().to_string()),
-                            val2: cap.get(3).map_or("".to_string(), |m| m.as_str().to_string()),
-                            map: self.data};
-                        stack.list.push(cmd);
-                        stack.data.push("".to_string());
-                    },
                     "end" => {
                         match stack.list.pop().unwrap() {
                             Command::For{var: v, start: s, end: e} => {
                                 let f = For::new(v, s, e);
                                 let html = f.run(stack.data.pop().unwrap());
-                                result += &html;
-                            },
-                            Command::If{con: c, val1: v1, val2: v2, map: m} => {
-                                let i = If::new(c, v1, v2, m);
-                                let html = i.run(stack.data.pop().unwrap());
-                                println!("html is {}", html);
                                 result += &html;
                             },
                             _ => {println!("can't find command")}
