@@ -27,6 +27,14 @@ fn main() {
         println!("{}", html);
 }
 ```
+簡易的なfor分も作りました。今はループさせることしかできません。。  
+```html
+<html>
+  <% for i in 0..5 %>
+    <div> hi <%= name %></div>
+  <% end %>
+</html>
+```
 
 send::htmlでIronResult<Response>を返すのでironで使いやすいです。 
 ```rust
