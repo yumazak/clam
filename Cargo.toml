@@ -1,6 +1,6 @@
 [package]
 name = "clam"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["uma <blog3170@gmail.com>"]
 
 license = "MIT"
