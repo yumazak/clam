@@ -8,8 +8,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::{BufReader};
 use std::path::Path;
-use util::StrReplace;
-
+use util::{Stack, Command, StrReplace};
 //#[derive(Debug)]
 pub struct Template<'a>{
     name: &'a str,
@@ -66,9 +65,10 @@ impl<'a> Template<'a> {
 
     fn reg<R: Read>(&self, br: BufReader<R>) -> String{
         let re = Regex::new(r"<%=\s*(.+?)\s*%>").unwrap();
-        //<% for i in 0..6 %>
-        let command = Regex::new(r"<%[^=]\s*(.+?)\s.+%>").unwrap();
+        //<% end %>
+        let command = Regex::new(r"<%[^=]\s*(.+?)\s.*%>").unwrap();
         let mut result = String::new();
+        let mut stack = Stack{list: Vec::new(),args: Vec::new(), data: Vec::new()};
         'outer: for xs in br.lines() {
             let s = xs.unwrap() + "\n";
             let mut line = StrReplace::new(&s);
@@ -88,13 +88,46 @@ impl<'a> Template<'a> {
                 }
             }
             for cap in command.captures_iter(&s) {
-                println!("{:?}", cap);
+                println!("{:?}", &cap);
                 match &cap[1] {
-                    "for" => {Template::c_for("i", 0, 3)},
-                    "if" => {println!("if")},
+                    "for" => {
+                        let re = Regex::new(r"<%[^=]\s*for\s(.+)\sin\s(\d+)..(\d+)[\s%]|[%]>").unwrap();
+                        let cap = re.captures(&s).unwrap();
+                        stack.list.push(Command::For);
+                        let args = vec![cap.get(1).map_or("".to_string(), |m| m.as_str().to_string()),
+                            cap.get(2).map_or("".to_string(), |m| m.as_str().to_string()),
+                            cap.get(3).map_or("".to_string(), |m| m.as_str().to_string())];
+                        stack.args.push(args);
+                        stack.data.push("".to_string());
+                    },
+                    "if" => {
+                        let re = Regex::new(r"<%[^=]\s*if\s(.+)\s(.{2})\s([^\s%]+)[\s%]|[%]>").unwrap();
+                        let cap = re.captures(&s).unwrap();
+                        stack.list.push(Command::If);
+                        let args = vec![cap.get(1).map_or("".to_string(), |m| m.as_str().to_string()),
+                            cap.get(2).map_or("".to_string(), |m| m.as_str().to_string()),
+                            cap.get(3).map_or("".to_string(), |m| m.as_str().to_string())];
+                        stack.args.push(args);
+                        stack.data.push("".to_string());
+                    },
+                    "end" => {
+                        match stack.list.last().unwrap() {
+                            &Command::For => {
+                                println!("for pop");
+                                stack.pop_all();
+                            },
+                            &Command::If => {
+                                println!("if pop");
+                                stack.pop_all();
+                            },
+                        };
+                    },
                     _ => {}
                 }
+                line.delete();
             }
+            stack.add(line.to_str());
+            println!("{:?}", stack.data);
             result += line.to_str();
         }
         result
