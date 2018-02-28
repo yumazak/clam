@@ -61,7 +61,7 @@ impl<'a> Template<'a> {
             for cap in re.captures_iter(&s) {
                 match self.data.get(&cap[1]) {
                     Some(d) => {line.replace(&cap[0], d);},
-                    _ => {},
+                    _ => {println!("can't find {}", &cap[1])},
                 }
             }
             result += line.to_str();
